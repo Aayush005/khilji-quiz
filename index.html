@@ -222,6 +222,25 @@
             color: #17a2b8;
         }
 
+        /* Feedback Message Styling */
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .feedback.right {
+            color: #28a745; /* Green for correct answers */
+        }
+
+        .feedback.wrong {
+            color: #dc3545; /* Red for incorrect answers */
+        }
+
+        .feedback.not-attempted {
+            color: #6c757d; /* Gray for not attempted */
+        }
+
         /* Alert when time is low */
         .alert {
             animation: blink 1s steps(5, start) infinite;
@@ -1121,13 +1140,18 @@
                     label.htmlFor = optionId;
                     label.textContent = `${labels[optIndex]}) ${option.text}`;
 
-                    // No event listener here; styling is handled in checkAnswers
-
                     optionsDiv.appendChild(radioInput);
                     optionsDiv.appendChild(label);
                 });
 
                 questionDiv.appendChild(optionsDiv);
+
+                // Add Feedback Div Below Options
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.classList.add('feedback');
+                feedbackDiv.id = `feedback-${index + 1}`; // Unique ID for each feedback div
+                questionDiv.appendChild(feedbackDiv);
+
                 quizForm.appendChild(questionDiv);
             });
 
@@ -1200,73 +1224,95 @@
         };
 
         // Function to check answers and display the result
-        // Function to check answers and display the result
-function checkAnswers() {
-    let score = 0;
-    let totalQuestions = shuffledQuestions.length; // Total number of questions
+        function checkAnswers() {
+            let score = 0;
+            let totalQuestions = shuffledQuestions.length; // Total number of questions
 
-    shuffledQuestions.forEach((q, index) => { // Iterate over each question
-        const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
-        if (selectedOption) {
-            // Get the selected label (A, B, C, D)
-            const selectedLabel = selectedOption.value;
-            // Map label to option index
-            const labelIndex = ['A', 'B', 'C', 'D'].indexOf(selectedLabel);
-            if (labelIndex !== -1 && q.options[labelIndex].isCorrect) {
-                score += 1; // Add 1 mark for correct answer
+            shuffledQuestions.forEach((q, index) => { // Iterate over each question
+                const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
+                const feedbackDiv = document.getElementById(`feedback-${index + 1}`);
+                
+                if (selectedOption) {
+                    // Get the selected label (A, B, C, D)
+                    const selectedLabel = selectedOption.value;
+                    // Map label to option index
+                    const labelIndex = ['A', 'B', 'C', 'D'].indexOf(selectedLabel);
+                    if (labelIndex !== -1 && q.options[labelIndex].isCorrect) {
+                        score += 1; // Add 1 mark for correct answer
 
-                // Mark the question link as correct in the Question Map
-                const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-                if (questionMapLink) {
-                    questionMapLink.classList.add('correct');
-                    questionMapLink.classList.remove('incorrect');
+                        // Mark the question link as correct in the Question Map
+                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                        if (questionMapLink) {
+                            questionMapLink.classList.add('correct');
+                            questionMapLink.classList.remove('incorrect');
+                        }
+
+                        // Update Feedback Below the Question
+                        if (feedbackDiv) {
+                            feedbackDiv.textContent = 'Right';
+                            feedbackDiv.classList.add('right');
+                            feedbackDiv.classList.remove('wrong', 'not-attempted');
+                        }
+                    } else {
+                        score -= 0.5; // Deduct 0.5 marks for incorrect answer
+
+                        // Mark the question link as incorrect in the Question Map
+                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                        if (questionMapLink) {
+                            questionMapLink.classList.add('incorrect');
+                            questionMapLink.classList.remove('correct');
+                        }
+
+                        // Update Feedback Below the Question
+                        if (feedbackDiv) {
+                            feedbackDiv.textContent = 'Wrong';
+                            feedbackDiv.classList.add('wrong');
+                            feedbackDiv.classList.remove('right', 'not-attempted');
+                        }
+                    }
+                } else {
+                    // If the question was not answered, mark as not attempted
+                    const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                    if (questionMapLink) {
+                        // Remove both classes if the question was not answered
+                        questionMapLink.classList.remove('correct', 'incorrect');
+                    }
+
+                    // Update Feedback Below the Question
+                    if (feedbackDiv) {
+                        feedbackDiv.textContent = 'Not Attempted';
+                        feedbackDiv.classList.add('not-attempted');
+                        feedbackDiv.classList.remove('right', 'wrong');
+                    }
                 }
-            } else {
-                score -= 0.5; // Deduct 0.5 marks for incorrect answer
+            });
 
-                // Mark the question link as incorrect in the Question Map
-                const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-                if (questionMapLink) {
-                    questionMapLink.classList.add('incorrect');
-                    questionMapLink.classList.remove('correct');
-                }
-            }
-        } else {
-            // If the question was not answered, remove any existing classes
-            const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-            if (questionMapLink) {
-                questionMapLink.classList.remove('correct', 'incorrect');
+            // Round the score to one decimal place
+            score = Math.round(score * 10) / 10;
+
+            // Update the result in the Question Map Sidebar
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = `You scored ${score} out of ${totalQuestions}`;
+
+            // Update the result below the questions list
+            const resultDivBelow = document.getElementById('resultBelow');
+            resultDivBelow.textContent = `You scored ${score} out of ${totalQuestions}`;
+
+            // Disable all inputs to prevent changes after submission
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
+
+            // Disable the submit buttons to prevent multiple submissions
+            const submitButton = document.getElementById('submitBtn');
+            submitButton.disabled = true;
+
+            const submitButtonBelow = document.getElementById('submitBtnBelow');
+            if (submitButtonBelow) {
+                submitButtonBelow.disabled = true;
             }
         }
-    });
-
-    // Round the score to one decimal place
-    score = Math.round(score * 10) / 10;
-
-    // Update the result in the Question Map Sidebar
-    const resultDiv = document.getElementById('result');
-    resultDiv.textContent = `You scored ${score} out of ${totalQuestions}`;
-
-    // Update the result below the questions list
-    const resultDivBelow = document.getElementById('resultBelow');
-    resultDivBelow.textContent = `You scored ${score} out of ${totalQuestions}`;
-
-    // Disable all inputs to prevent changes after submission
-    const inputs = document.querySelectorAll('input[type="radio"]');
-    inputs.forEach(input => {
-        input.disabled = true;
-    });
-
-    // Disable the submit buttons to prevent multiple submissions
-    const submitButton = document.getElementById('submitBtn');
-    submitButton.disabled = true;
-
-    const submitButtonBelow = document.getElementById('submitBtnBelow');
-    if (submitButtonBelow) {
-        submitButtonBelow.disabled = true;
-    }
-}
-
 
         // Toggle Question Map on small screens
         const toggleBtn = document.getElementById('toggleQuestionMap');
@@ -1278,3 +1324,4 @@ function checkAnswers() {
     </script>
 </body>
 </html>
+
