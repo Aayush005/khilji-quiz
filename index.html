@@ -296,12 +296,19 @@
         <form id="quizForm">
             <!-- Questions will be injected here by JavaScript -->
         </form>
+
+        <!-- Submit Button and Score Display Below the Questions List -->
+        <div class="submit-section">
+            <button type="button" class="submit-btn" id="submitBtnBelow" onclick="checkAnswers()">Submit</button>
+            <div id="resultBelow" class="result"></div>
+        </div>
     </div>
 
     <script>
         // Declare shuffledQuestions globally
         let shuffledQuestions = [];
 
+        // Replace the following array with your own questions
         const questions = [
             {
                 id: 'q1',
@@ -804,257 +811,258 @@
                 ]
             },
             {
-        id: 'q51',
-        question: 'What title did Jalaluddin Firuz Khilji hold during Sultan Balban\'s reign?',
-        options: [
-            { text: 'Diwan-i-Ariz', isCorrect: false },
-            { text: 'Sar-e-Naubat', isCorrect: true },
-            { text: 'Muhtasib', isCorrect: false },
-            { text: 'Diwan-i-Wazarat', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q52',
-        question: 'Which architectural structure built during the Khilji Dynasty is part of the Qutub Minar complex?',
-        options: [
-            { text: 'Siri Fort', isCorrect: false },
-            { text: 'Hazar Khamba Mahal', isCorrect: false },
-            { text: 'Alai Darwaza', isCorrect: true },
-            { text: 'Red Fort', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q53',
-        question: 'Amir Khusrau is credited with being the first poet to use which language in his works?',
-        options: [
-            { text: 'Persian', isCorrect: false },
-            { text: 'Turkish', isCorrect: false },
-            { text: 'Sanskrit', isCorrect: false },
-            { text: 'Hindi', isCorrect: true }
-        ]
-    },
-    {
-        id: 'q54',
-        question: 'What was the primary purpose of establishing "Mongolpuri" in Delhi during Jalaluddin Firuz Khilji\'s reign?',
-        options: [
-            { text: 'To serve as a military outpost against Mongols', isCorrect: false },
-            { text: 'To house Mongol converts to Islam', isCorrect: true },
-            { text: 'To facilitate trade with Mongol traders', isCorrect: false },
-            { text: 'To imprison captured Mongol invaders', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q55',
-        question: 'Which reform introduced by Alauddin Khilji aimed at preventing hoarding and stabilizing market prices?',
-        options: [
-            { text: 'Gharegar Tax', isCorrect: false },
-            { text: 'Blood and Sword Policy', isCorrect: false },
-            { text: 'Market Control Regulations', isCorrect: true },
-            { text: 'Haliya System', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q56',
-        question: 'During which campaign did Nusrat Khan lose his life?',
-        options: [
-            { text: 'Gujarat Campaign', isCorrect: false },
-            { text: 'Ranthambore Campaign', isCorrect: true },
-            { text: 'Chittorgarh Campaign', isCorrect: false },
-            { text: 'Conquest of South India', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q57',
-        question: 'What innovative practice related to cavalry did Alauddin Khilji introduce?',
-        options: [
-            { text: 'Use of composite bows', isCorrect: false },
-            { text: 'Branding horses', isCorrect: true },
-            { text: 'Equipping horses with armor', isCorrect: false },
-            { text: 'Training horses for archery', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q58',
-        question: 'Which department was responsible for managing the state\'s finances during Alauddin Khilji\'s reign?',
-        options: [
-            { text: 'Diwan-i-Insha', isCorrect: false },
-            { text: 'Diwan-i-Wazarat', isCorrect: true },
-            { text: 'Diwan-i-Ariz', isCorrect: false },
-            { text: 'Diwan-i-Rasalat', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q59',
-        question: 'Who was the ruler of Ranthambore defeated during Alauddin Khilji\'s campaign?',
-        options: [
-            { text: 'Ratan Singh', isCorrect: false },
-            { text: 'Hammir Dev', isCorrect: true },
-            { text: 'Raikaran', isCorrect: false },
-            { text: 'Ramchandra Dev', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q60',
-        question: 'What was the fate of Rangadevi and the Rajput women of Ranthambore after Alauddin Khilji\'s victory?',
-        options: [
-            { text: 'They were imprisoned', isCorrect: false },
-            { text: 'They were taken as concubines', isCorrect: false },
-            { text: 'They committed Jal Jauhar (self-immolation)', isCorrect: true },
-            { text: 'They were sent to Persia', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q61',
-        question: 'Which position within the Khilji administrative structure handled military affairs?',
-        options: [
-            { text: 'Diwan-i-Wazarat', isCorrect: false },
-            { text: 'Diwan-i-Ariz', isCorrect: true },
-            { text: 'Diwan-i-Insha', isCorrect: false },
-            { text: 'Muhtasib', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q62',
-        question: 'Alauddin Khilji\'s economic reforms included providing cash salaries to the army. What was the amount per month?',
-        options: [
-            { text: '10 Taka', isCorrect: false },
-            { text: '15 Taka', isCorrect: false },
-            { text: '20 Taka', isCorrect: true },
-            { text: '25 Taka', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q63',
-        question: 'Which Khilji ruler was known to have converted from Hinduism to Islam to assume the Sultanate?',
-        options: [
-            { text: 'Alauddin Khilji', isCorrect: false },
-            { text: 'Shihabuddin Umar Khilji', isCorrect: false },
-            { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
-            { text: 'Mubarak Shah Khilji', isCorrect: true }
-        ]
-    },
-    {
-        id: 'q64',
-        question: 'Which literary work by Amir Khusrau praises Alauddin Khilji with grand titles?',
-        options: [
-            { text: 'Diwan-e-Khusrau', isCorrect: false },
-            { text: 'Khazainul Futuh', isCorrect: true },
-            { text: 'Masnavi', isCorrect: false },
-            { text: 'Fasahat al-Hikam', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q65',
-        question: 'What was the main function of the Barid-e-Mumalik department in the Khilji administrative system?',
-        options: [
-            { text: 'Managing foreign relations', isCorrect: false },
-            { text: 'Supervising market activities', isCorrect: false },
-            { text: 'Overseeing intelligence operations', isCorrect: true },
-            { text: 'Drafting executive orders', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q66',
-        question: 'What does the title "Sikandar-e-Sani" mean, which was assumed by Alauddin Khilji upon his coronation?',
-        options: [
-            { text: 'First Alexander', isCorrect: false },
-            { text: 'Second Alexander', isCorrect: true },
-            { text: 'Great King', isCorrect: false },
-            { text: 'Conqueror of the World', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q67',
-        question: 'Which architectural structure built during the Khilji Dynasty is known as the Thousand Pillar Palace?',
-        options: [
-            { text: 'Alai Darwaza', isCorrect: false },
-            { text: 'Siri Fort', isCorrect: false },
-            { text: 'Hazar Khamba Mahal', isCorrect: true },
-            { text: 'Alai Minar', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q68',
-        question: 'Which administrative department in the Khilji system was responsible for drafting executive orders and correspondence?',
-        options: [
-            { text: 'Diwan-i-Ariz', isCorrect: false },
-            { text: 'Diwan-i-Wazarat', isCorrect: false },
-            { text: 'Diwan-i-Insha', isCorrect: true },
-            { text: 'Barid-e-Mumalik', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q69',
-        question: 'What innovative health tradition did Alauddin Khilji initiate for his soldiers?',
-        options: [
-            { text: 'Yoga and Meditation', isCorrect: false },
-            { text: 'Regular Medical Check-ups', isCorrect: false },
-            { text: 'Haliya (maintaining soldiers\' health)', isCorrect: true },
-            { text: 'Herbal Medicine Usage', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q70',
-        question: 'Which market-related department in the Khilji administrative system oversaw markets and regulated weights and measures?',
-        options: [
-            { text: 'Muhtasib', isCorrect: false },
-            { text: 'Baridi-Mandi', isCorrect: true },
-            { text: 'Diwan-i-Insha', isCorrect: false },
-            { text: 'Diwan-i-Rasalat', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q71',
-        question: 'What significant economic measure did Alauddin Khilji implement to enhance the army\'s efficiency and loyalty?',
-        options: [
-            { text: 'Introduced conscription', isCorrect: false },
-            { text: 'Provided cash salaries to the army', isCorrect: true },
-            { text: 'Allowed soldiers to own land', isCorrect: false },
-            { text: 'Granted soldiers trading rights', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q72',
-        question: 'Which literary form did Amir Khusrau, a prominent figure in Alauddin Khilji\'s court, help pioneer?',
-        options: [
-            { text: 'Ghazal', isCorrect: false },
-            { text: 'Masnavi', isCorrect: false },
-            { text: 'Qawwali', isCorrect: true },
-            { text: 'Epic Poetry', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q73',
-        question: 'Which department within the Khilji administrative structure managed foreign ambassadors and relations?',
-        options: [
-            { text: 'Diwan-i-Insha', isCorrect: false },
-            { text: 'Diwan-i-Rasalat', isCorrect: true },
-            { text: 'Diwan-i-Ariz', isCorrect: false },
-            { text: 'Diwan-i-Wazarat', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q74',
-        question: 'What was the main objective of the Chittorgarh Campaign led by Alauddin Khilji in 1303 AD?',
-        options: [
-            { text: 'To capture Ratan Singh of Chittor', isCorrect: false },
-            { text: 'To secure trade routes in Rajasthan', isCorrect: false },
-            { text: 'To capture Padmavati, the queen of Ratan Singh', isCorrect: true },
-            { text: 'To establish a permanent military base', isCorrect: false }
-        ]
-    },
-    {
-        id: 'q75',
-        question: 'Which department within the Khilji administrative system was responsible for managing the state\'s finances?',
-        options: [
-            { text: 'Diwan-i-Ariz', isCorrect: false },
-            { text: 'Diwan-i-Wazarat', isCorrect: true },
-            { text: 'Diwan-i-Insha', isCorrect: false },
-            { text: 'Barid-e-Mumalik', isCorrect: false }
-        ]
-    }
+                id: 'q51',
+                question: 'What title did Jalaluddin Firuz Khilji hold during Sultan Balban\'s reign?',
+                options: [
+                    { text: 'Diwan-i-Ariz', isCorrect: false },
+                    { text: 'Sar-e-Naubat', isCorrect: true },
+                    { text: 'Muhtasib', isCorrect: false },
+                    { text: 'Diwan-i-Wazarat', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q52',
+                question: 'Which architectural structure built during the Khilji Dynasty is part of the Qutub Minar complex?',
+                options: [
+                    { text: 'Siri Fort', isCorrect: false },
+                    { text: 'Hazar Khamba Mahal', isCorrect: false },
+                    { text: 'Alai Darwaza', isCorrect: true },
+                    { text: 'Red Fort', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q53',
+                question: 'Amir Khusrau is credited with being the first poet to use which language in his works?',
+                options: [
+                    { text: 'Persian', isCorrect: false },
+                    { text: 'Turkish', isCorrect: false },
+                    { text: 'Sanskrit', isCorrect: false },
+                    { text: 'Hindi', isCorrect: true }
+                ]
+            },
+            {
+                id: 'q54',
+                question: 'What was the primary purpose of establishing "Mongolpuri" in Delhi during Jalaluddin Firuz Khilji\'s reign?',
+                options: [
+                    { text: 'To serve as a military outpost against Mongols', isCorrect: false },
+                    { text: 'To house Mongol converts to Islam', isCorrect: true },
+                    { text: 'To facilitate trade with Mongol traders', isCorrect: false },
+                    { text: 'To imprison captured Mongol invaders', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q55',
+                question: 'Which reform introduced by Alauddin Khilji aimed at preventing hoarding and stabilizing market prices?',
+                options: [
+                    { text: 'Gharegar Tax', isCorrect: false },
+                    { text: 'Blood and Sword Policy', isCorrect: false },
+                    { text: 'Market Control Regulations', isCorrect: true },
+                    { text: 'Haliya System', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q56',
+                question: 'During which campaign did Nusrat Khan lose his life?',
+                options: [
+                    { text: 'Gujarat Campaign', isCorrect: false },
+                    { text: 'Ranthambore Campaign', isCorrect: true },
+                    { text: 'Chittorgarh Campaign', isCorrect: false },
+                    { text: 'Conquest of South India', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q57',
+                question: 'What innovative practice related to cavalry did Alauddin Khilji introduce?',
+                options: [
+                    { text: 'Use of composite bows', isCorrect: false },
+                    { text: 'Branding horses', isCorrect: true },
+                    { text: 'Equipping horses with armor', isCorrect: false },
+                    { text: 'Training horses for archery', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q58',
+                question: 'Which department was responsible for managing the state\'s finances during Alauddin Khilji\'s reign?',
+                options: [
+                    { text: 'Diwan-i-Insha', isCorrect: false },
+                    { text: 'Diwan-i-Wazarat', isCorrect: true },
+                    { text: 'Diwan-i-Ariz', isCorrect: false },
+                    { text: 'Diwan-i-Rasalat', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q59',
+                question: 'Who was the ruler of Ranthambore defeated during Alauddin Khilji\'s campaign?',
+                options: [
+                    { text: 'Ratan Singh', isCorrect: false },
+                    { text: 'Hammir Dev', isCorrect: true },
+                    { text: 'Raikaran', isCorrect: false },
+                    { text: 'Ramchandra Dev', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q60',
+                question: 'What was the fate of Rangadevi and the Rajput women of Ranthambore after Alauddin Khilji\'s victory?',
+                options: [
+                    { text: 'They were imprisoned', isCorrect: false },
+                    { text: 'They were taken as concubines', isCorrect: false },
+                    { text: 'They committed Jal Jauhar (self-immolation)', isCorrect: true },
+                    { text: 'They were sent to Persia', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q61',
+                question: 'Which position within the Khilji administrative structure handled military affairs?',
+                options: [
+                    { text: 'Diwan-i-Wazarat', isCorrect: false },
+                    { text: 'Diwan-i-Ariz', isCorrect: true },
+                    { text: 'Diwan-i-Insha', isCorrect: false },
+                    { text: 'Muhtasib', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q62',
+                question: 'Alauddin Khilji\'s economic reforms included providing cash salaries to the army. What was the amount per month?',
+                options: [
+                    { text: '10 Taka', isCorrect: false },
+                    { text: '15 Taka', isCorrect: false },
+                    { text: '20 Taka', isCorrect: true },
+                    { text: '25 Taka', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q63',
+                question: 'Which Khilji ruler was known to have converted from Hinduism to Islam to assume the Sultanate?',
+                options: [
+                    { text: 'Alauddin Khilji', isCorrect: false },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Mubarak Shah Khilji', isCorrect: true }
+                ]
+            },
+            {
+                id: 'q64',
+                question: 'Which literary work by Amir Khusrau praises Alauddin Khilji with grand titles?',
+                options: [
+                    { text: 'Diwan-e-Khusrau', isCorrect: false },
+                    { text: 'Khazainul Futuh', isCorrect: true },
+                    { text: 'Masnavi', isCorrect: false },
+                    { text: 'Fasahat al-Hikam', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q65',
+                question: 'What was the main function of the Barid-e-Mumalik department in the Khilji administrative system?',
+                options: [
+                    { text: 'Managing foreign relations', isCorrect: false },
+                    { text: 'Supervising market activities', isCorrect: false },
+                    { text: 'Overseeing intelligence operations', isCorrect: true },
+                    { text: 'Drafting executive orders', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q66',
+                question: 'What does the title "Sikandar-e-Sani" mean, which was assumed by Alauddin Khilji upon his coronation?',
+                options: [
+                    { text: 'First Alexander', isCorrect: false },
+                    { text: 'Second Alexander', isCorrect: true },
+                    { text: 'Great King', isCorrect: false },
+                    { text: 'Conqueror of the World', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q67',
+                question: 'Which architectural structure built during the Khilji Dynasty is known as the Thousand Pillar Palace?',
+                options: [
+                    { text: 'Alai Darwaza', isCorrect: false },
+                    { text: 'Siri Fort', isCorrect: false },
+                    { text: 'Hazar Khamba Mahal', isCorrect: true },
+                    { text: 'Alai Minar', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q68',
+                question: 'Which administrative department in the Khilji system was responsible for drafting executive orders and correspondence?',
+                options: [
+                    { text: 'Diwan-i-Ariz', isCorrect: false },
+                    { text: 'Diwan-i-Wazarat', isCorrect: false },
+                    { text: 'Diwan-i-Insha', isCorrect: true },
+                    { text: 'Barid-e-Mumalik', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q69',
+                question: 'What innovative health tradition did Alauddin Khilji initiate for his soldiers?',
+                options: [
+                    { text: 'Yoga and Meditation', isCorrect: false },
+                    { text: 'Regular Medical Check-ups', isCorrect: false },
+                    { text: 'Haliya (maintaining soldiers\' health)', isCorrect: true },
+                    { text: 'Herbal Medicine Usage', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q70',
+                question: 'Which market-related department in the Khilji administrative system oversaw markets and regulated weights and measures?',
+                options: [
+                    { text: 'Muhtasib', isCorrect: false },
+                    { text: 'Baridi-Mandi', isCorrect: true },
+                    { text: 'Diwan-i-Insha', isCorrect: false },
+                    { text: 'Diwan-i-Rasalat', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q71',
+                question: 'What significant economic measure did Alauddin Khilji implement to enhance the army\'s efficiency and loyalty?',
+                options: [
+                    { text: 'Introduced conscription', isCorrect: false },
+                    { text: 'Provided cash salaries to the army', isCorrect: true },
+                    { text: 'Allowed soldiers to own land', isCorrect: false },
+                    { text: 'Granted soldiers trading rights', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q72',
+                question: 'Which literary form did Amir Khusrau, a prominent figure in Alauddin Khilji\'s court, help pioneer?',
+                options: [
+                    { text: 'Ghazal', isCorrect: false },
+                    { text: 'Masnavi', isCorrect: false },
+                    { text: 'Qawwali', isCorrect: true },
+                    { text: 'Epic Poetry', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q73',
+                question: 'Which department within the Khilji administrative structure managed foreign ambassadors and relations?',
+                options: [
+                    { text: 'Diwan-i-Insha', isCorrect: false },
+                    { text: 'Diwan-i-Rasalat', isCorrect: true },
+                    { text: 'Diwan-i-Ariz', isCorrect: false },
+                    { text: 'Diwan-i-Wazarat', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q74',
+                question: 'What was the main objective of the Chittorgarh Campaign led by Alauddin Khilji in 1303 AD?',
+                options: [
+                    { text: 'To capture Ratan Singh of Chittor', isCorrect: false },
+                    { text: 'To secure trade routes in Rajasthan', isCorrect: false },
+                    { text: 'To capture Padmavati, the queen of Ratan Singh', isCorrect: true },
+                    { text: 'To establish a permanent military base', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q75',
+                question: 'Which department within the Khilji administrative system was responsible for managing the state\'s finances?',
+                options: [
+                    { text: 'Diwan-i-Ariz', isCorrect: false },
+                    { text: 'Diwan-i-Wazarat', isCorrect: true },
+                    { text: 'Diwan-i-Insha', isCorrect: false },
+                    { text: 'Barid-e-Mumalik', isCorrect: false }
+                ]
+            }
             // Add more questions here if needed
         ];
+
         // Function to shuffle an array using Fisher-Yates algorithm
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -1067,14 +1075,14 @@
         // Function to render the questions dynamically
         function renderQuestions() {
             const quizForm = document.getElementById('quizForm');
-            const questions = getQuestions(); // Retrieve the questions array
-            if (!questions || !Array.isArray(questions) || questions.length < 25) {
+            const questionsArray = getQuestions(); // Retrieve the questions array
+            if (!questionsArray || !Array.isArray(questionsArray) || questionsArray.length < 25) {
                 quizForm.innerHTML = '<p>Insufficient questions available. Please ensure there are at least 25 questions in the questions array.</p>';
                 return;
             }
 
-            // Randomly select 25 questions from the 50
-            const selectedQuestions = getRandomQuestions(questions, 25);
+            // Randomly select 25 questions from the available questions
+            const selectedQuestions = getRandomQuestions(questionsArray, 25);
 
             // Assign shuffledQuestions to the global variable
             shuffledQuestions = shuffleArray([...selectedQuestions]); // Create a copy and shuffle
@@ -1128,9 +1136,7 @@
 
         // Function to retrieve the questions array
         function getQuestions() {
-            // Replace this with your actual questions array or import it from another file
-            // For example, you can define it directly here or fetch it from a server
-            // Ensure that this function returns the questions array
+            // Replace this with your actual questions array
             return questions; // Assuming 'questions' is defined globally
         }
 
@@ -1188,64 +1194,79 @@
         // Initialize the quiz on page load
         window.onload = function () {
             renderQuestions(); // Render questions on page load
-            const twelveMinutes = 60 * 10, // 10 minutes in seconds
+            const tenMinutes = 60 * 10, // 10 minutes in seconds
                   display = document.getElementById('timer');
-            startTimer(twelveMinutes, display);
+            startTimer(tenMinutes, display);
         };
 
         // Function to check answers and display the result
-        function checkAnswers() {
-            let score = 0;
-            let totalQuestions = shuffledQuestions.length; // Use shuffledQuestions
+        // Function to check answers and display the result
+function checkAnswers() {
+    let score = 0;
+    let totalQuestions = shuffledQuestions.length; // Total number of questions
 
-            shuffledQuestions.forEach((q, index) => { // Iterate over shuffledQuestions
-                const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
-                if (selectedOption) {
-                    // Find the corresponding option object based on the label
-                    const selectedLabel = selectedOption.value;
-                    // Map label to option index
-                    const labelIndex = ['A', 'B', 'C', 'D'].indexOf(selectedLabel);
-                    if (labelIndex !== -1 && q.options[labelIndex].isCorrect) {
-                        score++;
-                        // Mark as correct
-                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-                        if (questionMapLink) {
-                            questionMapLink.classList.add('correct');
-                            // Optionally, remove 'incorrect' class if previously set
-                            questionMapLink.classList.remove('incorrect');
-                        }
-                    } else {
-                        // Mark as incorrect
-                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-                        if (questionMapLink) {
-                            questionMapLink.classList.add('incorrect');
-                            // Optionally, remove 'correct' class if previously set
-                            questionMapLink.classList.remove('correct');
-                        }
-                    }
-                } else {
-                    // Optionally, handle unanswered questions
-                    const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
-                    if (questionMapLink) {
-                        // Remove both classes if the question was not answered
-                        questionMapLink.classList.remove('correct', 'incorrect');
-                    }
+    shuffledQuestions.forEach((q, index) => { // Iterate over each question
+        const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
+        if (selectedOption) {
+            // Get the selected label (A, B, C, D)
+            const selectedLabel = selectedOption.value;
+            // Map label to option index
+            const labelIndex = ['A', 'B', 'C', 'D'].indexOf(selectedLabel);
+            if (labelIndex !== -1 && q.options[labelIndex].isCorrect) {
+                score += 1; // Add 1 mark for correct answer
+
+                // Mark the question link as correct in the Question Map
+                const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                if (questionMapLink) {
+                    questionMapLink.classList.add('correct');
+                    questionMapLink.classList.remove('incorrect');
                 }
-            });
+            } else {
+                score -= 0.5; // Deduct 0.5 marks for incorrect answer
 
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = `You scored ${score} out of ${totalQuestions}`;
-
-            // Disable all inputs to prevent changes after submission
-            const inputs = document.querySelectorAll('input[type="radio"]');
-            inputs.forEach(input => {
-                input.disabled = true;
-            });
-
-            // Disable the submit button to prevent multiple submissions
-            const submitButton = document.getElementById('submitBtn');
-            submitButton.disabled = true;
+                // Mark the question link as incorrect in the Question Map
+                const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                if (questionMapLink) {
+                    questionMapLink.classList.add('incorrect');
+                    questionMapLink.classList.remove('correct');
+                }
+            }
+        } else {
+            // If the question was not answered, remove any existing classes
+            const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+            if (questionMapLink) {
+                questionMapLink.classList.remove('correct', 'incorrect');
+            }
         }
+    });
+
+    // Round the score to one decimal place
+    score = Math.round(score * 10) / 10;
+
+    // Update the result in the Question Map Sidebar
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = `You scored ${score} out of ${totalQuestions}`;
+
+    // Update the result below the questions list
+    const resultDivBelow = document.getElementById('resultBelow');
+    resultDivBelow.textContent = `You scored ${score} out of ${totalQuestions}`;
+
+    // Disable all inputs to prevent changes after submission
+    const inputs = document.querySelectorAll('input[type="radio"]');
+    inputs.forEach(input => {
+        input.disabled = true;
+    });
+
+    // Disable the submit buttons to prevent multiple submissions
+    const submitButton = document.getElementById('submitBtn');
+    submitButton.disabled = true;
+
+    const submitButtonBelow = document.getElementById('submitBtnBelow');
+    if (submitButtonBelow) {
+        submitButtonBelow.disabled = true;
+    }
+}
+
 
         // Toggle Question Map on small screens
         const toggleBtn = document.getElementById('toggleQuestionMap');
