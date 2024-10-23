@@ -18,11 +18,130 @@
             color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Accommodate fixed elements */
             min-height: 100vh;
             padding: 20px;
         }
 
+        /* Timer Styling */
+        .timer {
+            position: fixed;          /* Fixes the position relative to the viewport */
+            top: 20px;                /* Positions 20px from the top */
+            right: 20px;              /* Positions 20px from the right */
+            font-size: 1.5rem;        /* Sets a readable font size */
+            color: #d9534f;           /* Sets the text color (red) */
+            font-weight: bold;        /* Makes the text bold */
+            z-index: 1000;            /* Ensures the timer stays above other elements */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+            padding: 10px 15px;       /* Adds padding around the timer text */
+            border-radius: 5px;       /* Rounds the corners of the timer box */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds a subtle shadow for depth */
+        }
+
+        /* Question Map Sidebar Styling */
+        .question-map {
+            position: fixed;          
+            top: 80px;                /* Positioned below the timer */
+            right: 20px;               /* Positioned on the right */
+            width: 180px;              /* Increased width to accommodate 5 columns */
+            background-color: rgba(255, 255, 255, 0.9); 
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 999;             
+            max-height: 90vh;         
+            overflow-y: auto;         
+        }
+
+        .question-map h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+
+        /* Update #questionLinks to Use CSS Grid */
+        #questionLinks {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 5px; /* Adjust the spacing between links as needed */
+            justify-items: center; /* Centers the links within each grid cell */
+        }
+
+        /* Adjust .question-map .question-link Styling */
+        .question-map .question-link {
+            padding: 5px 0; /* Reduces vertical padding */
+            font-size: 0.9rem; /* Slightly smaller font size for better fit */
+            width: 100%; /* Ensures the link takes the full width of the grid cell */
+            box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+            border-radius: 4px; /* Maintains rounded corners */
+            text-align: center; /* Centers the text within the link */
+            background-color: #f8f9fa;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .question-map .question-link:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Add Correct and Incorrect Classes for Highlighting */
+        .question-map .question-link.correct {
+            background-color: #28a745; /* Green background */
+            color: #fff; /* White text */
+            border-color: #28a745; /* Green border */
+        }
+
+        .question-map .question-link.incorrect {
+            background-color: #dc3545; /* Red background */
+            color: #fff; /* White text */
+            border-color: #dc3545; /* Red border */
+        }
+
+        /* Submit Button and Score Styling */
+        .question-map .submit-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .question-map .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .question-map .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .question-map .submit-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .question-map .result {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #17a2b8;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Quiz Container Styling */
         .quiz-container {
             background-color: #fff;
             padding: 30px 40px;
@@ -30,20 +149,14 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             max-width: 800px;
             width: 100%;
+            margin-right: 200px; /* Accommodates the question map sidebar on the right */
+            margin-top: 50px;     /* Maintains spacing from the top */
         }
 
         h1 {
             text-align: center;
             margin-bottom: 20px;
             color: #007bff;
-        }
-
-        .timer {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            color: #d9534f;
-            font-weight: bold;
         }
 
         .question {
@@ -89,6 +202,7 @@
             cursor: pointer;
             font-size: 1.1rem;
             transition: background-color 0.3s;
+            margin-top: 20px;
         }
 
         .submit-btn:hover {
@@ -120,499 +234,927 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .quiz-container {
-                padding: 20px;
+                margin-right: 0; /* Removes right margin on small screens */
             }
 
-            .timer {
-                font-size: 1.2rem;
+            .question-map {
+                display: none; /* Hides the question map on small screens */
             }
 
-            .submit-btn {
-                padding: 12px;
-                font-size: 1rem;
+            .toggle-question-map {
+                display: block; /* Shows toggle button on small screens */
             }
+        }
 
-            .result {
-                font-size: 1.1rem;
-            }
+        /* Toggle Button for Question Map (Visible on Small Screens) */
+        .toggle-question-map {
+            position: fixed;
+            top: 20px;
+            right: 20px; /* Positioned on the right */
+            z-index: 1001;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none; /* Hidden by default */
+        }
+
+        /* Active State for Question Map on Small Screens */
+        .question-map.active {
+            display: block;
         }
     </style>
 </head>
 <body>
+    <!-- Timer Display -->
+    <div class="timer" id="timer">12:00</div>
+
+    <!-- Toggle Button for Question Map (Visible on Small Screens) -->
+    <button class="toggle-question-map" id="toggleQuestionMap">☰</button>
+
+    <!-- Question Map Sidebar -->
+    <div class="question-map" id="questionMap">
+        <h2>Question Map</h2>
+        <div id="questionLinks">
+            <!-- Question links will be injected here by JavaScript -->
+        </div>
+        <!-- Submit Button and Score Display Below the Question Links -->
+        <div class="submit-section">
+            <button type="button" class="submit-btn" id="submitBtn" onclick="checkAnswers()">Submit</button>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
     <div class="quiz-container">
         <h1>Khilji Dynasty MCQ Quiz</h1>
-        <!-- Timer Display -->
-        <div class="timer" id="timer">00:10</div>
         
         <form id="quizForm">
-            <!-- Question 1 -->
-             <!-- Question 1 -->
-        <div class="question">
-            <p>1. The Khilji Dynasty ruled the Delhi Sultanate during which years?</p>
-            <input type="radio" name="q1" value="A"> A) 1206–1290 AD<br>
-            <input type="radio" name="q1" value="B"> B) 1290–1320 AD<br>
-            <input type="radio" name="q1" value="C"> C) 1320–1414 AD<br>
-            <input type="radio" name="q1" value="D"> D) 1414–1451 AD<br>
-        </div>
-        
-        <!-- Question 2 -->
-        <div class="question">
-            <p>2. The term "Khilji" is derived from which region?</p>
-            <input type="radio" name="q2" value="A"> A) Turkestan<br>
-            <input type="radio" name="q2" value="B"> B) Khalj region in Afghanistan<br>
-            <input type="radio" name="q2" value="C"> C) Khorasan<br>
-            <input type="radio" name="q2" value="D"> D) Central Asia<br>
-        </div>
-        
-        <!-- Question 3 -->
-        <div class="question">
-            <p>3. Who was the founder of the Khilji Dynasty?</p>
-            <input type="radio" name="q3" value="A"> A) Alauddin Khilji<br>
-            <input type="radio" name="q3" value="B"> B) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q3" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q3" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 4 -->
-        <div class="question">
-            <p>4. In which river valley did the Khiljis settle in Afghanistan?</p>
-            <input type="radio" name="q4" value="A"> A) Kabul River Valley<br>
-            <input type="radio" name="q4" value="B"> B) Helmand River Valley<br>
-            <input type="radio" name="q4" value="C"> C) Indus River Valley<br>
-            <input type="radio" name="q4" value="D"> D) Oxus River Valley<br>
-        </div>
-        
-        <!-- Question 5 -->
-        <div class="question">
-            <p>5. What was the real name of Jalaluddin Firuz Khilji?</p>
-            <input type="radio" name="q5" value="A"> A) Malik Firuz<br>
-            <input type="radio" name="q5" value="B"> B) Ali Gurshasp<br>
-            <input type="radio" name="q5" value="C"> C) Kayumars<br>
-            <input type="radio" name="q5" value="D"> D) Ghiyasuddin<br>
-        </div>
-        
-        <!-- Question 6 -->
-        <div class="question">
-            <p>6. Who assassinated Jalaluddin Firuz Khilji to become Sultan?</p>
-            <input type="radio" name="q6" value="A"> A) Ghiyasuddin Tughlaq<br>
-            <input type="radio" name="q6" value="B"> B) Alauddin Khilji<br>
-            <input type="radio" name="q6" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q6" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 7 -->
-        <div class="question">
-            <p>7. Which Sultan introduced market control regulations to stabilize prices?</p>
-            <input type="radio" name="q7" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q7" value="B"> B) Alauddin Khilji<br>
-            <input type="radio" name="q7" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q7" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 8 -->
-        <div class="question">
-            <p>8. Who succeeded Alauddin Khilji in 1316 AD?</p>
-            <input type="radio" name="q8" value="A"> A) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q8" value="B"> B) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q8" value="C"> C) Nasiruddin Khusro Shah<br>
-            <input type="radio" name="q8" value="D"> D) Ghiyasuddin Tughlaq<br>
-        </div>
-        
-        <!-- Question 9 -->
-        <div class="question">
-            <p>9. What was the title given to Jalaluddin Firuz Khilji by Sultan Kaikubad?</p>
-            <input type="radio" name="q9" value="A"> A) Ulugh Khan<br>
-            <input type="radio" name="q9" value="B"> B) Shaista Khan<br>
-            <input type="radio" name="q9" value="C"> C) Khan-i-Khanan<br>
-            <input type="radio" name="q9" value="D"> D) Malik Naib<br>
-        </div>
-        
-        <!-- Question 10 -->
-        <div class="question">
-            <p>10. Which dynasty ended with the rise of Jalaluddin Firuz Khilji?</p>
-            <input type="radio" name="q10" value="A"> A) Slave Dynasty<br>
-            <input type="radio" name="q10" value="B"> B) Tughlaq Dynasty<br>
-            <input type="radio" name="q10" value="C"> C) Lodi Dynasty<br>
-            <input type="radio" name="q10" value="D"> D) Sayyid Dynasty<br>
-        </div>
-        
-        <!-- Question 11 -->
-        <div class="question">
-            <p>11. Jalaluddin Firuz Khilji adopted a liberal policy towards which community?</p>
-            <input type="radio" name="q11" value="A"> A) Mongols<br>
-            <input type="radio" name="q11" value="B"> B) Hindus<br>
-            <input type="radio" name="q11" value="C"> C) Buddhists<br>
-            <input type="radio" name="q11" value="D"> D) Christians<br>
-        </div>
-        
-        <!-- Question 12 -->
-        <div class="question">
-            <p>12. The first Mongol invasion during the Khilji Dynasty occurred under whose reign?</p>
-            <input type="radio" name="q12" value="A"> A) Alauddin Khilji<br>
-            <input type="radio" name="q12" value="B"> B) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q12" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q12" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 13 -->
-        <div class="question">
-            <p>13. What settlement did Jalaluddin establish in Delhi for Mongol converts to Islam?</p>
-            <input type="radio" name="q13" value="A"> A) Turkman Gate<br>
-            <input type="radio" name="q13" value="B"> B) Mongolpuri (Nav Musalman)<br>
-            <input type="radio" name="q13" value="C"> C) Khilji Nagar<br>
-            <input type="radio" name="q13" value="D"> D) Ghazni Town<br>
-        </div>
-        
-        <!-- Questions 14 to 50 -->
-        
-        <!-- Question 14 -->
-        <div class="question">
-            <p>14. What was the real name of Alauddin Khilji?</p>
-            <input type="radio" name="q14" value="A"> A) Malik Firuz<br>
-            <input type="radio" name="q14" value="B"> B) Ali Gurshasp<br>
-            <input type="radio" name="q14" value="C"> C) Qutbuddin Mubarak<br>
-            <input type="radio" name="q14" value="D"> D) Jalaluddin<br>
-        </div>
-        
-        <!-- Question 15 -->
-        <div class="question">
-            <p>15. Alauddin Khilji was the nephew and son-in-law of which ruler?</p>
-            <input type="radio" name="q15" value="A"> A) Ghiyasuddin Balban<br>
-            <input type="radio" name="q15" value="B"> B) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q15" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q15" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 16 -->
-        <div class="question">
-            <p>16. Before becoming Sultan, Alauddin Khilji was the Subedar (Governor) of which place?</p>
-            <input type="radio" name="q16" value="A"> A) Bengal<br>
-            <input type="radio" name="q16" value="B"> B) Kara-Manikpur<br>
-            <input type="radio" name="q16" value="C"> C) Gujarat<br>
-            <input type="radio" name="q16" value="D"> D) Multan<br>
-        </div>
-        
-        <!-- Question 17 -->
-        <div class="question">
-            <p>17. In which year did Alauddin Khilji assassinate Jalaluddin Firuz Khilji to become Sultan?</p>
-            <input type="radio" name="q17" value="A"> A) 1290 AD<br>
-            <input type="radio" name="q17" value="B"> B) 1296 AD<br>
-            <input type="radio" name="q17" value="C"> C) 1300 AD<br>
-            <input type="radio" name="q17" value="D"> D) 1316 AD<br>
-        </div>
-        
-        <!-- Question 18 -->
-        <div class="question">
-            <p>18. Which Sultan is known for extensive military campaigns that expanded the Delhi Sultanate?</p>
-            <input type="radio" name="q18" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q18" value="B"> B) Alauddin Khilji<br>
-            <input type="radio" name="q18" value="C"> C) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q18" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 19 -->
-        <div class="question">
-            <p>19. Alauddin Khilji introduced market control regulations primarily to:</p>
-            <input type="radio" name="q19" value="A"> A) Encourage foreign trade<br>
-            <input type="radio" name="q19" value="B"> B) Stabilize prices and prevent hoarding<br>
-            <input type="radio" name="q19" value="C"> C) Increase tax revenue<br>
-            <input type="radio" name="q19" value="D"> D) Support farmers<br>
-        </div>
-        
-        <!-- Question 20 -->
-        <div class="question">
-            <p>20. Who succeeded Alauddin Khilji in 1316 AD?</p>
-            <input type="radio" name="q20" value="A"> A) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q20" value="B"> B) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q20" value="C"> C) Nasiruddin Khusro Shah<br>
-            <input type="radio" name="q20" value="D"> D) Ghiyasuddin Tughlaq<br>
-        </div>
-        
-        <!-- Question 21 -->
-        <div class="question">
-            <p>21. Which dynasty succeeded the Khilji Dynasty in the Delhi Sultanate?</p>
-            <input type="radio" name="q21" value="A"> A) Tughlaq Dynasty<br>
-            <input type="radio" name="q21" value="B"> B) Slave Dynasty<br>
-            <input type="radio" name="q21" value="C"> C) Lodi Dynasty<br>
-            <input type="radio" name="q21" value="D"> D) Sayyid Dynasty<br>
-        </div>
-        
-        <!-- Question 22 -->
-        <div class="question">
-            <p>22. Which Khilji ruler's reign was notably short due to palace intrigues?</p>
-            <input type="radio" name="q22" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q22" value="B"> B) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q22" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q22" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 23 -->
-        <div class="question">
-            <p>23. Qutbuddin Mubarak Shah Khilji ruled during which years?</p>
-            <input type="radio" name="q23" value="A"> A) 1290–1296 AD<br>
-            <input type="radio" name="q23" value="B"> B) 1296–1316 AD<br>
-            <input type="radio" name="q23" value="C"> C) 1316–1320 AD<br>
-            <input type="radio" name="q23" value="D"> D) 1320–1325 AD<br>
-        </div>
-        
-        <!-- Question 24 -->
-        <div class="question">
-            <p>24. Nasiruddin Khusro Shah's rule marked the end of which dynasty?</p>
-            <input type="radio" name="q24" value="A"> A) Slave Dynasty<br>
-            <input type="radio" name="q24" value="B"> B) Khilji Dynasty<br>
-            <input type="radio" name="q24" value="C"> C) Tughlaq Dynasty<br>
-            <input type="radio" name="q24" value="D"> D) Sayyid Dynasty<br>
-        </div>
-        
-        <!-- Question 25 -->
-        <div class="question">
-            <p>25. Who overthrew Nasiruddin Khusro Shah to establish the Tughlaq Dynasty?</p>
-            <input type="radio" name="q25" value="A"> A) Muhammad bin Tughlaq<br>
-            <input type="radio" name="q25" value="B"> B) Firoz Shah Tughlaq<br>
-            <input type="radio" name="q25" value="C"> C) Ghiyasuddin Tughlaq<br>
-            <input type="radio" name="q25" value="D"> D) Timur<br>
-        </div>
-        
-        <!-- Question 26 -->
-        <div class="question">
-            <p>26. The Khilji Dynasty was part of which larger historical period in India?</p>
-            <input type="radio" name="q26" value="A"> A) Mughal Empire<br>
-            <input type="radio" name="q26" value="B"> B) Delhi Sultanate<br>
-            <input type="radio" name="q26" value="C"> C) British Raj<br>
-            <input type="radio" name="q26" value="D"> D) Gupta Empire<br>
-        </div>
-        
-        <!-- Question 27 -->
-        <div class="question">
-            <p>27. The title "Ariz-i-Mamalik" held by Jalaluddin Firuz Khilji refers to which position?</p>
-            <input type="radio" name="q27" value="A"> A) Chief Justice<br>
-            <input type="radio" name="q27" value="B"> B) Finance Minister<br>
-            <input type="radio" name="q27" value="C"> C) Defense Minister<br>
-            <input type="radio" name="q27" value="D"> D) Foreign Minister<br>
-        </div>
-        
-        <!-- Question 28 -->
-        <div class="question">
-            <p>28. The Khilji rulers were of which ethnic origin?</p>
-            <input type="radio" name="q28" value="A"> A) Arab<br>
-            <input type="radio" name="q28" value="B"> B) Persian<br>
-            <input type="radio" name="q28" value="C"> C) Turkic<br>
-            <input type="radio" name="q28" value="D"> D) Mongol<br>
-        </div>
-        
-        <!-- Question 29 -->
-        <div class="question">
-            <p>29. Which Khilji ruler is known for constructing the Alai Darwaza in the Qutub Minar complex?</p>
-            <input type="radio" name="q29" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q29" value="B"> B) Alauddin Khilji<br>
-            <input type="radio" name="q29" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q29" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 30 -->
-        <div class="question">
-            <p>30. "Nav Musalman" refers to which group during the Khilji Dynasty?</p>
-            <input type="radio" name="q30" value="A"> A) Newly converted Hindus<br>
-            <input type="radio" name="q30" value="B"> B) Mongol converts to Islam<br>
-            <input type="radio" name="q30" value="C"> C) Persian traders<br>
-            <input type="radio" name="q30" value="D"> D) Turkic soldiers<br>
-        </div>
-        
-        <!-- Question 31 -->
-        <div class="question">
-            <p>31. Which Khilji ruler reversed many of Alauddin Khilji's stringent policies?</p>
-            <input type="radio" name="q31" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q31" value="B"> B) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q31" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q31" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 32 -->
-        <div class="question">
-            <p>32. Which of the following was a significant challenge during the Khilji Dynasty?</p>
-            <input type="radio" name="q32" value="A"> A) European invasions<br>
-            <input type="radio" name="q32" value="B"> B) Mongol invasions<br>
-            <input type="radio" name="q32" value="C"> C) Japanese invasions<br>
-            <input type="radio" name="q32" value="D"> D) African invasions<br>
-        </div>
-        
-        <!-- Question 33 -->
-        <div class="question">
-            <p>33. What does the term "Sar-e-Naubat" mean?</p>
-            <input type="radio" name="q33" value="A"> A) Prime Minister<br>
-            <input type="radio" name="q33" value="B"> B) Head of the Military Band<br>
-            <input type="radio" name="q33" value="C"> C) Chief Treasurer<br>
-            <input type="radio" name="q33" value="D"> D) Religious Leader<br>
-        </div>
-        
-        <!-- Question 34 -->
-        <div class="question">
-            <p>34. The Khilji Dynasty contributed to which architectural style in India?</p>
-            <input type="radio" name="q34" value="A"> A) Dravidian architecture<br>
-            <input type="radio" name="q34" value="B"> B) Indo-Islamic architecture<br>
-            <input type="radio" name="q34" value="C"> C) Mughal architecture<br>
-            <input type="radio" name="q34" value="D"> D) Gothic architecture<br>
-        </div>
-        
-        <!-- Question 35 -->
-        <div class="question">
-            <p>35. Alauddin Khilji strengthened which sector to repel Mongol invasions?</p>
-            <input type="radio" name="q35" value="A"> A) Navy<br>
-            <input type="radio" name="q35" value="B"> B) Army<br>
-            <input type="radio" name="q35" value="C"> C) Agriculture<br>
-            <input type="radio" name="q35" value="D"> D) Trade<br>
-        </div>
-        
-        <!-- Question 36 -->
-        <div class="question">
-            <p>36. The settlement "Mongolpuri" established in Delhi was intended for:</p>
-            <input type="radio" name="q36" value="A"> A) Refugees from Central Asia<br>
-            <input type="radio" name="q36" value="B"> B) Mongol prisoners of war<br>
-            <input type="radio" name="q36" value="C"> C) Mongol converts to Islam<br>
-            <input type="radio" name="q36" value="D"> D) Trade merchants<br>
-        </div>
-        
-        <!-- Question 37 -->
-        <div class="question">
-            <p>37. Who was the last ruler of the Khilji Dynasty?</p>
-            <input type="radio" name="q37" value="A"> A) Alauddin Khilji<br>
-            <input type="radio" name="q37" value="B"> B) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q37" value="C"> C) Nasiruddin Khusro Shah<br>
-            <input type="radio" name="q37" value="D"> D) Qutbuddin Mubarak Shah Khilji<br>
-        </div>
-        
-        <!-- Question 38 -->
-        <div class="question">
-            <p>38. Which Khilji ruler faced internal dissent and challenges to his authority?</p>
-            <input type="radio" name="q38" value="A"> A) Jalaluddin Firuz Khilji<br>
-            <input type="radio" name="q38" value="B"> B) Shihabuddin Umar Khilji<br>
-            <input type="radio" name="q38" value="C"> C) Qutbuddin Mubarak Shah Khilji<br>
-            <input type="radio" name="q38" value="D"> D) Nasiruddin Khusro Shah<br>
-        </div>
-        
-        <!-- Question 39 -->
-        <div class="question">
-            <p>39. The Khilji Dynasty is best remembered for:</p>
-            <input type="radio" name="q39" value="A"> A) Establishing the Mughal Empire<br>
-            <input type="radio" name="q39" value="B"> B) Administrative innovations and expanding the Sultanate<br>
-            <input type="radio" name="q39" value="C"> C) Defeating British forces<br>
-            <input type="radio" name="q39" value="D"> D) Uniting the entire Indian subcontinent<br>
-        </div>
-        
-        <!-- Question 40 -->
-        <div class="question">
-            <p>40. Which dynasty succeeded the Khilji Dynasty in the Delhi Sultanate?</p>
-            <input type="radio" name="q40" value="A"> A) Tughlaq Dynasty<br>
-            <input type="radio" name="q40" value="B"> B) Slave Dynasty<br>
-            <input type="radio" name="q40" value="C"> C) Lodi Dynasty<br>
-            <input type="radio" name="q40" value="D"> D) Sayyid Dynasty<br>
-        </div>
-        
-        <!-- Part 2: Questions 41 to 50 -->
-        
-        <!-- Question 41 -->
-        <div class="question">
-            <p>41. What was Alauddin Khilji's real name?</p>
-            <input type="radio" name="q41" value="A"> A) Malik Firuz<br>
-            <input type="radio" name="q41" value="B"> B) Ali Gurshasp<br>
-            <input type="radio" name="q41" value="C"> C) Nusrat Khan<br>
-            <input type="radio" name="q41" value="D"> D) Ghiyasuddin<br>
-        </div>
-        
-        <!-- Question 42 -->
-        <div class="question">
-            <p>42. Where did Alauddin Khilji's coronation take place?</p>
-            <input type="radio" name="q42" value="A"> A) Red Fort<br>
-            <input type="radio" name="q42" value="B"> B) Lal Mahal (Red Palace)<br>
-            <input type="radio" name="q42" value="C"> C) Siri Fort<br>
-            <input type="radio" name="q42" value="D"> D) Alai Darwaza<br>
-        </div>
-        
-        <!-- Question 43 -->
-        <div class="question">
-            <p>43. What title did Alauddin Khilji assume upon his coronation?</p>
-            <input type="radio" name="q43" value="A"> A) Sultan of Delhi<br>
-            <input type="radio" name="q43" value="B"> B) Sikandar-e-Sani<br>
-            <input type="radio" name="q43" value="C"> C) Shahenshah<br>
-            <input type="radio" name="q43" value="D"> D) Amir-ul-Mu'minin<br>
-        </div>
-        
-        <!-- Question 44 -->
-        <div class="question">
-            <p>44. Which contemporary poet honored Alauddin Khilji with titles such as "Sultan of the World" and "Shepherd of the People"?</p>
-            <input type="radio" name="q44" value="A"> A) Kabir<br>
-            <input type="radio" name="q44" value="B"> B) Amir Khusrau<br>
-            <input type="radio" name="q44" value="C"> C) Tulsidas<br>
-            <input type="radio" name="q44" value="D"> D) Kalidas<br>
-        </div>
-        
-        <!-- Question 45 -->
-        <div class="question">
-            <p>45. During Alauddin Khilji's reign, which group posed significant invasions to the Delhi Sultanate?</p>
-            <input type="radio" name="q45" value="A"> A) British<br>
-            <input type="radio" name="q45" value="B"> B) Mongols<br>
-            <input type="radio" name="q45" value="C"> C) Portuguese<br>
-            <input type="radio" name="q45" value="D"> D) Persians<br>
-        </div>
-        
-        <!-- Question 46 -->
-        <div class="question">
-            <p>46. What policy did Alauddin Khilji adopt to deal with Mongol invasions?</p>
-            <input type="radio" name="q46" value="A"> A) Diplomacy and alliances<br>
-            <input type="radio" name="q46" value="B"> B) Trade negotiations<br>
-            <input type="radio" name="q46" value="C"> C) Blood and Sword<br>
-            <input type="radio" name="q46" value="D"> D) Religious conversion<br>
-        </div>
-        
-        <!-- Question 47 -->
-        <div class="question">
-            <p>47. Who accompanied Alauddin Khilji in the Chittorgarh Campaign of 1303 AD?</p>
-            <input type="radio" name="q47" value="A"> A) Malik Kafur<br>
-            <input type="radio" name="q47" value="B"> B) Nusrat Khan<br>
-            <input type="radio" name="q47" value="C"> C) Amir Khusrau<br>
-            <input type="radio" name="q47" value="D"> D) Ulugh Khan<br>
-        </div>
-        
-        <!-- Question 48 -->
-        <div class="question">
-            <p>48. Which campaign led to the acquisition of Malik Kafur for Alauddin Khilji?</p>
-            <input type="radio" name="q48" value="A"> A) Ranthambore Campaign<br>
-            <input type="radio" name="q48" value="B"> B) Chittorgarh Campaign<br>
-            <input type="radio" name="q48" value="C"> C) Gujarat Campaign<br>
-            <input type="radio" name="q48" value="D"> D) Conquest of South India<br>
-        </div>
-        
-        <!-- Question 49 -->
-        <div class="question">
-            <p>49. In which year did Alauddin Khilji launch the Gujarat Campaign?</p>
-            <input type="radio" name="q49" value="A"> A) 1296 AD<br>
-            <input type="radio" name="q49" value="B"> B) 1298 AD<br>
-            <input type="radio" name="q49" value="C"> C) 1301 AD<br>
-            <input type="radio" name="q49" value="D"> D) 1303 AD<br>
-        </div>
-        
-        <!-- Question 50 -->
-        <div class="question">
-            <p>50. Who were the leaders during Alauddin Khilji's Gujarat Campaign?</p>
-            <input type="radio" name="q50" value="A"> A) Ulugh Khan and Nusrat Khan<br>
-            <input type="radio" name="q50" value="B"> B) Malik Kafur and Amir Khusrau<br>
-            <input type="radio" name="q50" value="C"> C) Khizr Khan and Ulugh Khan<br>
-            <input type="radio" name="q50" value="D"> D) Nusrat Khan and Malik Kafur<br>
-        </div>
-        
-
-            
-            <!-- Additional questions (up to 50) should follow the same structure -->
-            
-            <button type="button" class="submit-btn" id="submitBtn" onclick="checkAnswers()">Submit</button>
+            <!-- Questions will be injected here by JavaScript -->
         </form>
-        
-        <div id="result" class="result"></div>
     </div>
 
     <script>
+        // Declare shuffledQuestions globally
+        let shuffledQuestions = [];
+
+        const questions = [
+            {
+                id: 'q1',
+                question: 'The Khilji Dynasty ruled the Delhi Sultanate during which years?',
+                options: [
+                    { text: '1206–1290 AD', isCorrect: false },
+                    { text: '1290–1320 AD', isCorrect: true },
+                    { text: '1320–1414 AD', isCorrect: false },
+                    { text: '1414–1451 AD', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q2',
+                question: 'The term "Khilji" is derived from which region?',
+                options: [
+                    { text: 'Turkestan', isCorrect: false },
+                    { text: 'Khalj region in Afghanistan', isCorrect: true },
+                    { text: 'Khorasan', isCorrect: false },
+                    { text: 'Central Asia', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q3',
+                question: 'Who was the founder of the Khilji Dynasty?',
+                options: [
+                    { text: 'Alauddin Khilji', isCorrect: false },
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q4',
+                question: 'In which river valley did the Khiljis settle in Afghanistan?',
+                options: [
+                    { text: 'Kabul River Valley', isCorrect: false },
+                    { text: 'Helmand River Valley', isCorrect: true },
+                    { text: 'Indus River Valley', isCorrect: false },
+                    { text: 'Oxus River Valley', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q5',
+                question: 'What was the real name of Jalaluddin Firuz Khilji?',
+                options: [
+                    { text: 'Malik Firuz', isCorrect: true },
+                    { text: 'Ali Gurshasp', isCorrect: false },
+                    { text: 'Kayumars', isCorrect: false },
+                    { text: 'Ghiyasuddin', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q6',
+                question: 'Who assassinated Jalaluddin Firuz Khilji to become Sultan?',
+                options: [
+                    { text: 'Ghiyasuddin Tughlaq', isCorrect: false },
+                    { text: 'Alauddin Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q7',
+                question: 'Which Sultan introduced market control regulations to stabilize prices?',
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Alauddin Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q8',
+                question: 'Who succeeded Alauddin Khilji in 1316 AD?',
+                options: [
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false },
+                    { text: 'Ghiyasuddin Tughlaq', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q9',
+                question: 'What was the title given to Jalaluddin Firuz Khilji by Sultan Kaikubad?',
+                options: [
+                    { text: 'Ulugh Khan', isCorrect: false },
+                    { text: 'Shaista Khan', isCorrect: true },
+                    { text: 'Khan-i-Khanan', isCorrect: false },
+                    { text: 'Malik Naib', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q10',
+                question: 'Which dynasty ended with the rise of Jalaluddin Firuz Khilji?',
+                options: [
+                    { text: 'Slave Dynasty', isCorrect: true },
+                    { text: 'Tughlaq Dynasty', isCorrect: false },
+                    { text: 'Lodi Dynasty', isCorrect: false },
+                    { text: 'Sayyid Dynasty', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q11',
+                question: 'Jalaluddin Firuz Khilji adopted a liberal policy towards which community?',
+                options: [
+                    { text: 'Mongols', isCorrect: false },
+                    { text: 'Hindus', isCorrect: true },
+                    { text: 'Buddhists', isCorrect: false },
+                    { text: 'Christians', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q12',
+                question: 'The first Mongol invasion during the Khilji Dynasty occurred under whose reign?',
+                options: [
+                    { text: 'Alauddin Khilji', isCorrect: false },
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q13',
+                question: 'What settlement did Jalaluddin establish in Delhi for Mongol converts to Islam?',
+                options: [
+                    { text: 'Turkman Gate', isCorrect: false },
+                    { text: 'Mongolpuri (Nav Musalman)', isCorrect: true },
+                    { text: 'Khilji Nagar', isCorrect: false },
+                    { text: 'Ghazni Town', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q14',
+                question: 'What was the real name of Alauddin Khilji?',
+                options: [
+                    { text: 'Malik Firuz', isCorrect: false },
+                    { text: 'Ali Gurshasp', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak', isCorrect: false },
+                    { text: 'Jalaluddin', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q15',
+                question: 'Alauddin Khilji was the nephew and son-in-law of which ruler?',
+                options: [
+                    { text: 'Ghiyasuddin Balban', isCorrect: false },
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q16',
+                question: 'Before becoming Sultan, Alauddin Khilji was the Subedar (Governor) of which place?',
+                options: [
+                    { text: 'Bengal', isCorrect: false },
+                    { text: 'Kara-Manikpur', isCorrect: true },
+                    { text: 'Gujarat', isCorrect: false },
+                    { text: 'Multan', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q17',
+                question: 'In which year did Alauddin Khilji assassinate Jalaluddin Firuz Khilji to become Sultan?',
+                options: [
+                    { text: '1290 AD', isCorrect: false },
+                    { text: '1296 AD', isCorrect: true },
+                    { text: '1300 AD', isCorrect: false },
+                    { text: '1316 AD', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q18',
+                question: 'Which Sultan is known for extensive military campaigns that expanded the Delhi Sultanate?',
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Alauddin Khilji', isCorrect: true },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q19',
+                question: 'Alauddin Khilji introduced market control regulations primarily to:',
+                options: [
+                    { text: 'Encourage foreign trade', isCorrect: false },
+                    { text: 'Stabilize prices and prevent hoarding', isCorrect: true },
+                    { text: 'Increase tax revenue', isCorrect: false },
+                    { text: 'Support farmers', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q20',
+                question: 'Who succeeded Alauddin Khilji in 1316 AD?',
+                options: [
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false },
+                    { text: 'Ghiyasuddin Tughlaq', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q21',
+                question: 'Which dynasty succeeded the Khilji Dynasty in the Delhi Sultanate?',
+                options: [
+                    { text: 'Tughlaq Dynasty', isCorrect: true },
+                    { text: 'Slave Dynasty', isCorrect: false },
+                    { text: 'Lodi Dynasty', isCorrect: false },
+                    { text: 'Sayyid Dynasty', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q22',
+                question: "Which Khilji ruler's reign was notably short due to palace intrigues?",
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q23',
+                question: 'Qutbuddin Mubarak Shah Khilji ruled during which years?',
+                options: [
+                    { text: '1290–1296 AD', isCorrect: false },
+                    { text: '1296–1316 AD', isCorrect: false },
+                    { text: '1316–1320 AD', isCorrect: true },
+                    { text: '1320–1325 AD', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q24',
+                question: "Nasiruddin Khusro Shah's rule marked the end of which dynasty?",
+                options: [
+                    { text: 'Slave Dynasty', isCorrect: false },
+                    { text: 'Khilji Dynasty', isCorrect: true },
+                    { text: 'Tughlaq Dynasty', isCorrect: false },
+                    { text: 'Sayyid Dynasty', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q25',
+                question: 'Who overthrew Nasiruddin Khusro Shah to establish the Tughlaq Dynasty?',
+                options: [
+                    { text: 'Muhammad bin Tughlaq', isCorrect: false },
+                    { text: 'Firoz Shah Tughlaq', isCorrect: false },
+                    { text: 'Ghiyasuddin Tughlaq', isCorrect: true },
+                    { text: 'Timur', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q26',
+                question: 'The Khilji Dynasty was part of which larger historical period in India?',
+                options: [
+                    { text: 'Mughal Empire', isCorrect: false },
+                    { text: 'Delhi Sultanate', isCorrect: true },
+                    { text: 'British Raj', isCorrect: false },
+                    { text: 'Gupta Empire', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q27',
+                question: 'The title "Ariz-i-Mamalik" held by Jalaluddin Firuz Khilji refers to which position?',
+                options: [
+                    { text: 'Chief Justice', isCorrect: false },
+                    { text: 'Finance Minister', isCorrect: false },
+                    { text: 'Defense Minister', isCorrect: true },
+                    { text: 'Foreign Minister', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q28',
+                question: 'The Khilji rulers were of which ethnic origin?',
+                options: [
+                    { text: 'Arab', isCorrect: false },
+                    { text: 'Persian', isCorrect: false },
+                    { text: 'Turkic', isCorrect: true },
+                    { text: 'Mongol', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q29',
+                question: 'Which Khilji ruler is known for constructing the Alai Darwaza in the Qutub Minar complex?',
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Alauddin Khilji', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q30',
+                question: '"Nav Musalman" refers to which group during the Khilji Dynasty?',
+                options: [
+                    { text: 'Newly converted Hindus', isCorrect: false },
+                    { text: 'Mongol converts to Islam', isCorrect: true },
+                    { text: 'Persian traders', isCorrect: false },
+                    { text: 'Turkic soldiers', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q31',
+                question: "Which Khilji ruler reversed many of Alauddin Khilji's stringent policies?",
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: true },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q32',
+                question: 'Which of the following was a significant challenge during the Khilji Dynasty?',
+                options: [
+                    { text: 'European invasions', isCorrect: false },
+                    { text: 'Mongol invasions', isCorrect: true },
+                    { text: 'Japanese invasions', isCorrect: false },
+                    { text: 'African invasions', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q33',
+                question: 'What does the term "Sar-e-Naubat" mean?',
+                options: [
+                    { text: 'Prime Minister', isCorrect: false },
+                    { text: 'Head of the Military Band', isCorrect: true },
+                    { text: 'Chief Treasurer', isCorrect: false },
+                    { text: 'Religious Leader', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q34',
+                question: 'The Khilji Dynasty contributed to which architectural style in India?',
+                options: [
+                    { text: 'Dravidian architecture', isCorrect: false },
+                    { text: 'Indo-Islamic architecture', isCorrect: true },
+                    { text: 'Mughal architecture', isCorrect: false },
+                    { text: 'Gothic architecture', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q35',
+                question: 'Alauddin Khilji strengthened which sector to repel Mongol invasions?',
+                options: [
+                    { text: 'Navy', isCorrect: false },
+                    { text: 'Army', isCorrect: true },
+                    { text: 'Agriculture', isCorrect: false },
+                    { text: 'Trade', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q36',
+                question: 'The settlement "Mongolpuri" established in Delhi was intended for:',
+                options: [
+                    { text: 'Refugees from Central Asia', isCorrect: false },
+                    { text: 'Mongol prisoners of war', isCorrect: false },
+                    { text: 'Mongol converts to Islam', isCorrect: true },
+                    { text: 'Trade merchants', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q37',
+                question: 'Who was the last ruler of the Khilji Dynasty?',
+                options: [
+                    { text: 'Alauddin Khilji', isCorrect: false },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: true },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q38',
+                question: 'Which Khilji ruler faced internal dissent and challenges to his authority?',
+                options: [
+                    { text: 'Jalaluddin Firuz Khilji', isCorrect: false },
+                    { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+                    { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: true },
+                    { text: 'Nasiruddin Khusro Shah', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q39',
+                question: 'The Khilji Dynasty is best remembered for:',
+                options: [
+                    { text: 'Establishing the Mughal Empire', isCorrect: false },
+                    { text: 'Administrative innovations and expanding the Sultanate', isCorrect: true },
+                    { text: 'Defeating British forces', isCorrect: false },
+                    { text: 'Uniting the entire Indian subcontinent', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q40',
+                question: 'Which dynasty succeeded the Khilji Dynasty in the Delhi Sultanate?',
+                options: [
+                    { text: 'Tughlaq Dynasty', isCorrect: true },
+                    { text: 'Slave Dynasty', isCorrect: false },
+                    { text: 'Lodi Dynasty', isCorrect: false },
+                    { text: 'Sayyid Dynasty', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q41',
+                question: "What was Alauddin Khilji's real name?",
+                options: [
+                    { text: 'Malik Firuz', isCorrect: false },
+                    { text: 'Ali Gurshasp', isCorrect: true },
+                    { text: 'Nusrat Khan', isCorrect: false },
+                    { text: 'Ghiyasuddin', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q42',
+                question: "Where did Alauddin Khilji's coronation take place?",
+                options: [
+                    { text: 'Red Fort', isCorrect: false },
+                    { text: 'Lal Mahal (Red Palace)', isCorrect: true },
+                    { text: 'Siri Fort', isCorrect: false },
+                    { text: 'Alai Darwaza', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q43',
+                question: 'What title did Alauddin Khilji assume upon his coronation?',
+                options: [
+                    { text: 'Sultan of Delhi', isCorrect: false },
+                    { text: 'Sikandar-e-Sani', isCorrect: true },
+                    { text: 'Shahenshah', isCorrect: false },
+                    { text: 'Amir-ul-Mu\'minin', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q44',
+                question: 'Which contemporary poet honored Alauddin Khilji with titles such as "Sultan of the World" and "Shepherd of the People"?',
+                options: [
+                    { text: 'Kabir', isCorrect: false },
+                    { text: 'Amir Khusrau', isCorrect: true },
+                    { text: 'Tulsidas', isCorrect: false },
+                    { text: 'Kalidas', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q45',
+                question: "During Alauddin Khilji's reign, which group posed significant invasions to the Delhi Sultanate?",
+                options: [
+                    { text: 'British', isCorrect: false },
+                    { text: 'Mongols', isCorrect: true },
+                    { text: 'Portuguese', isCorrect: false },
+                    { text: 'Persians', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q46',
+                question: 'What policy did Alauddin Khilji adopt to deal with Mongol invasions?',
+                options: [
+                    { text: 'Diplomacy and alliances', isCorrect: false },
+                    { text: 'Trade negotiations', isCorrect: false },
+                    { text: 'Blood and Sword', isCorrect: true },
+                    { text: 'Religious conversion', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q47',
+                question: 'Who accompanied Alauddin Khilji in the Chittorgarh Campaign of 1303 AD?',
+                options: [
+                    { text: 'Malik Kafur', isCorrect: false },
+                    { text: 'Nusrat Khan', isCorrect: false },
+                    { text: 'Amir Khusrau', isCorrect: true },
+                    { text: 'Ulugh Khan', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q48',
+                question: 'Which campaign led to the acquisition of Malik Kafur for Alauddin Khilji?',
+                options: [
+                    { text: 'Ranthambore Campaign', isCorrect: false },
+                    { text: 'Chittorgarh Campaign', isCorrect: false },
+                    { text: 'Gujarat Campaign', isCorrect: true },
+                    { text: 'Conquest of South India', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q49',
+                question: 'In which year did Alauddin Khilji launch the Gujarat Campaign?',
+                options: [
+                    { text: '1296 AD', isCorrect: true },
+                    { text: '1298 AD', isCorrect: false },
+                    { text: '1301 AD', isCorrect: false },
+                    { text: '1303 AD', isCorrect: false }
+                ]
+            },
+            {
+                id: 'q50',
+                question: "Who were the leaders during Alauddin Khilji's Gujarat Campaign?",
+                options: [
+                    { text: 'Ulugh Khan and Nusrat Khan', isCorrect: true },
+                    { text: 'Malik Kafur and Amir Khusrau', isCorrect: false },
+                    { text: 'Khizr Khan and Ulugh Khan', isCorrect: false },
+                    { text: 'Nusrat Khan and Malik Kafur', isCorrect: false }
+                ]
+            },
+            {
+        id: 'q51',
+        question: 'What title did Jalaluddin Firuz Khilji hold during Sultan Balban\'s reign?',
+        options: [
+            { text: 'Diwan-i-Ariz', isCorrect: false },
+            { text: 'Sar-e-Naubat', isCorrect: true },
+            { text: 'Muhtasib', isCorrect: false },
+            { text: 'Diwan-i-Wazarat', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q52',
+        question: 'Which architectural structure built during the Khilji Dynasty is part of the Qutub Minar complex?',
+        options: [
+            { text: 'Siri Fort', isCorrect: false },
+            { text: 'Hazar Khamba Mahal', isCorrect: false },
+            { text: 'Alai Darwaza', isCorrect: true },
+            { text: 'Red Fort', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q53',
+        question: 'Amir Khusrau is credited with being the first poet to use which language in his works?',
+        options: [
+            { text: 'Persian', isCorrect: false },
+            { text: 'Turkish', isCorrect: false },
+            { text: 'Sanskrit', isCorrect: false },
+            { text: 'Hindi', isCorrect: true }
+        ]
+    },
+    {
+        id: 'q54',
+        question: 'What was the primary purpose of establishing "Mongolpuri" in Delhi during Jalaluddin Firuz Khilji\'s reign?',
+        options: [
+            { text: 'To serve as a military outpost against Mongols', isCorrect: false },
+            { text: 'To house Mongol converts to Islam', isCorrect: true },
+            { text: 'To facilitate trade with Mongol traders', isCorrect: false },
+            { text: 'To imprison captured Mongol invaders', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q55',
+        question: 'Which reform introduced by Alauddin Khilji aimed at preventing hoarding and stabilizing market prices?',
+        options: [
+            { text: 'Gharegar Tax', isCorrect: false },
+            { text: 'Blood and Sword Policy', isCorrect: false },
+            { text: 'Market Control Regulations', isCorrect: true },
+            { text: 'Haliya System', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q56',
+        question: 'During which campaign did Nusrat Khan lose his life?',
+        options: [
+            { text: 'Gujarat Campaign', isCorrect: false },
+            { text: 'Ranthambore Campaign', isCorrect: true },
+            { text: 'Chittorgarh Campaign', isCorrect: false },
+            { text: 'Conquest of South India', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q57',
+        question: 'What innovative practice related to cavalry did Alauddin Khilji introduce?',
+        options: [
+            { text: 'Use of composite bows', isCorrect: false },
+            { text: 'Branding horses', isCorrect: true },
+            { text: 'Equipping horses with armor', isCorrect: false },
+            { text: 'Training horses for archery', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q58',
+        question: 'Which department was responsible for managing the state\'s finances during Alauddin Khilji\'s reign?',
+        options: [
+            { text: 'Diwan-i-Insha', isCorrect: false },
+            { text: 'Diwan-i-Wazarat', isCorrect: true },
+            { text: 'Diwan-i-Ariz', isCorrect: false },
+            { text: 'Diwan-i-Rasalat', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q59',
+        question: 'Who was the ruler of Ranthambore defeated during Alauddin Khilji\'s campaign?',
+        options: [
+            { text: 'Ratan Singh', isCorrect: false },
+            { text: 'Hammir Dev', isCorrect: true },
+            { text: 'Raikaran', isCorrect: false },
+            { text: 'Ramchandra Dev', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q60',
+        question: 'What was the fate of Rangadevi and the Rajput women of Ranthambore after Alauddin Khilji\'s victory?',
+        options: [
+            { text: 'They were imprisoned', isCorrect: false },
+            { text: 'They were taken as concubines', isCorrect: false },
+            { text: 'They committed Jal Jauhar (self-immolation)', isCorrect: true },
+            { text: 'They were sent to Persia', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q61',
+        question: 'Which position within the Khilji administrative structure handled military affairs?',
+        options: [
+            { text: 'Diwan-i-Wazarat', isCorrect: false },
+            { text: 'Diwan-i-Ariz', isCorrect: true },
+            { text: 'Diwan-i-Insha', isCorrect: false },
+            { text: 'Muhtasib', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q62',
+        question: 'Alauddin Khilji\'s economic reforms included providing cash salaries to the army. What was the amount per month?',
+        options: [
+            { text: '10 Taka', isCorrect: false },
+            { text: '15 Taka', isCorrect: false },
+            { text: '20 Taka', isCorrect: true },
+            { text: '25 Taka', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q63',
+        question: 'Which Khilji ruler was known to have converted from Hinduism to Islam to assume the Sultanate?',
+        options: [
+            { text: 'Alauddin Khilji', isCorrect: false },
+            { text: 'Shihabuddin Umar Khilji', isCorrect: false },
+            { text: 'Qutbuddin Mubarak Shah Khilji', isCorrect: false },
+            { text: 'Mubarak Shah Khilji', isCorrect: true }
+        ]
+    },
+    {
+        id: 'q64',
+        question: 'Which literary work by Amir Khusrau praises Alauddin Khilji with grand titles?',
+        options: [
+            { text: 'Diwan-e-Khusrau', isCorrect: false },
+            { text: 'Khazainul Futuh', isCorrect: true },
+            { text: 'Masnavi', isCorrect: false },
+            { text: 'Fasahat al-Hikam', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q65',
+        question: 'What was the main function of the Barid-e-Mumalik department in the Khilji administrative system?',
+        options: [
+            { text: 'Managing foreign relations', isCorrect: false },
+            { text: 'Supervising market activities', isCorrect: false },
+            { text: 'Overseeing intelligence operations', isCorrect: true },
+            { text: 'Drafting executive orders', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q66',
+        question: 'What does the title "Sikandar-e-Sani" mean, which was assumed by Alauddin Khilji upon his coronation?',
+        options: [
+            { text: 'First Alexander', isCorrect: false },
+            { text: 'Second Alexander', isCorrect: true },
+            { text: 'Great King', isCorrect: false },
+            { text: 'Conqueror of the World', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q67',
+        question: 'Which architectural structure built during the Khilji Dynasty is known as the Thousand Pillar Palace?',
+        options: [
+            { text: 'Alai Darwaza', isCorrect: false },
+            { text: 'Siri Fort', isCorrect: false },
+            { text: 'Hazar Khamba Mahal', isCorrect: true },
+            { text: 'Alai Minar', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q68',
+        question: 'Which administrative department in the Khilji system was responsible for drafting executive orders and correspondence?',
+        options: [
+            { text: 'Diwan-i-Ariz', isCorrect: false },
+            { text: 'Diwan-i-Wazarat', isCorrect: false },
+            { text: 'Diwan-i-Insha', isCorrect: true },
+            { text: 'Barid-e-Mumalik', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q69',
+        question: 'What innovative health tradition did Alauddin Khilji initiate for his soldiers?',
+        options: [
+            { text: 'Yoga and Meditation', isCorrect: false },
+            { text: 'Regular Medical Check-ups', isCorrect: false },
+            { text: 'Haliya (maintaining soldiers\' health)', isCorrect: true },
+            { text: 'Herbal Medicine Usage', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q70',
+        question: 'Which market-related department in the Khilji administrative system oversaw markets and regulated weights and measures?',
+        options: [
+            { text: 'Muhtasib', isCorrect: false },
+            { text: 'Baridi-Mandi', isCorrect: true },
+            { text: 'Diwan-i-Insha', isCorrect: false },
+            { text: 'Diwan-i-Rasalat', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q71',
+        question: 'What significant economic measure did Alauddin Khilji implement to enhance the army\'s efficiency and loyalty?',
+        options: [
+            { text: 'Introduced conscription', isCorrect: false },
+            { text: 'Provided cash salaries to the army', isCorrect: true },
+            { text: 'Allowed soldiers to own land', isCorrect: false },
+            { text: 'Granted soldiers trading rights', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q72',
+        question: 'Which literary form did Amir Khusrau, a prominent figure in Alauddin Khilji\'s court, help pioneer?',
+        options: [
+            { text: 'Ghazal', isCorrect: false },
+            { text: 'Masnavi', isCorrect: false },
+            { text: 'Qawwali', isCorrect: true },
+            { text: 'Epic Poetry', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q73',
+        question: 'Which department within the Khilji administrative structure managed foreign ambassadors and relations?',
+        options: [
+            { text: 'Diwan-i-Insha', isCorrect: false },
+            { text: 'Diwan-i-Rasalat', isCorrect: true },
+            { text: 'Diwan-i-Ariz', isCorrect: false },
+            { text: 'Diwan-i-Wazarat', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q74',
+        question: 'What was the main objective of the Chittorgarh Campaign led by Alauddin Khilji in 1303 AD?',
+        options: [
+            { text: 'To capture Ratan Singh of Chittor', isCorrect: false },
+            { text: 'To secure trade routes in Rajasthan', isCorrect: false },
+            { text: 'To capture Padmavati, the queen of Ratan Singh', isCorrect: true },
+            { text: 'To establish a permanent military base', isCorrect: false }
+        ]
+    },
+    {
+        id: 'q75',
+        question: 'Which department within the Khilji administrative system was responsible for managing the state\'s finances?',
+        options: [
+            { text: 'Diwan-i-Ariz', isCorrect: false },
+            { text: 'Diwan-i-Wazarat', isCorrect: true },
+            { text: 'Diwan-i-Insha', isCorrect: false },
+            { text: 'Barid-e-Mumalik', isCorrect: false }
+        ]
+    }
+            // Add more questions here if needed
+        ];
+        // Function to shuffle an array using Fisher-Yates algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to render the questions dynamically
+        function renderQuestions() {
+            const quizForm = document.getElementById('quizForm');
+            const questions = getQuestions(); // Retrieve the questions array
+            if (!questions || !Array.isArray(questions) || questions.length < 25) {
+                quizForm.innerHTML = '<p>Insufficient questions available. Please ensure there are at least 25 questions in the questions array.</p>';
+                return;
+            }
+
+            // Randomly select 25 questions from the 50
+            const selectedQuestions = getRandomQuestions(questions, 25);
+
+            // Assign shuffledQuestions to the global variable
+            shuffledQuestions = shuffleArray([...selectedQuestions]); // Create a copy and shuffle
+
+            shuffledQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.id = `question-${index + 1}`; // Assign unique ID
+
+                // Question text
+                const questionText = document.createElement('p');
+                questionText.textContent = `${index + 1}. ${q.question}`;
+                questionDiv.appendChild(questionText);
+
+                // Options
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                // Shuffle options and assign back to q.options
+                q.options = shuffleArray([...q.options]);
+                const shuffledOptions = q.options;
+
+                // Assign labels A, B, C, D dynamically
+                const labels = ['A', 'B', 'C', 'D'];
+
+                shuffledOptions.forEach((option, optIndex) => {
+                    const optionId = `${q.id}_option${optIndex + 1}`; // Unique ID for each option
+
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.id = optionId;
+                    radioInput.name = q.id;
+                    radioInput.value = labels[optIndex]; // Assign label as value
+
+                    const label = document.createElement('label');
+                    label.htmlFor = optionId;
+                    label.textContent = `${labels[optIndex]}) ${option.text}`;
+
+                    // No event listener here; styling is handled in checkAnswers
+
+                    optionsDiv.appendChild(radioInput);
+                    optionsDiv.appendChild(label);
+                });
+
+                questionDiv.appendChild(optionsDiv);
+                quizForm.appendChild(questionDiv);
+            });
+
+            generateQuestionMap(shuffledQuestions.length);
+        }
+
+        // Function to retrieve the questions array
+        function getQuestions() {
+            // Replace this with your actual questions array or import it from another file
+            // For example, you can define it directly here or fetch it from a server
+            // Ensure that this function returns the questions array
+            return questions; // Assuming 'questions' is defined globally
+        }
+
+        // Function to randomly select n questions from the questions array
+        function getRandomQuestions(questionsArray, n) {
+            const shuffled = shuffleArray([...questionsArray]);
+            return shuffled.slice(0, n);
+        }
+
+        // Function to generate the Question Map links
+        function generateQuestionMap(totalQuestions) {
+            const questionLinksDiv = document.getElementById('questionLinks');
+            questionLinksDiv.innerHTML = ''; // Clear any existing links
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const link = document.createElement('a');
+                link.href = `#question-${i}`;
+                link.classList.add('question-link');
+                link.textContent = `Q${i}`;
+
+                questionLinksDiv.appendChild(link);
+            }
+        }
+
         // Timer Functionality
         function startTimer(duration, display) {
             let timer = duration, minutes, seconds;
@@ -625,8 +1167,8 @@
 
                 display.textContent = minutes + ":" + seconds;
 
-                // Add alert class when time is less than 5 minutes
-                if (timer <= 300 && timer > 0) { // 300 seconds = 5 minutes
+                // Add alert class when time is less than 1 minute
+                if (timer <= 60 && timer > 0) { // 60 seconds = 1 minute
                     display.classList.add('alert');
                 }
 
@@ -637,94 +1179,81 @@
             }, 1000);
         }
 
+        // Function to automatically submit the quiz when time is up
         function autoSubmit() {
             alert("Time's up! The quiz will now be submitted.");
             checkAnswers();
         }
 
+        // Initialize the quiz on page load
         window.onload = function () {
-            const twentyFiveMinutes = 10 * 1, // 25 minutes in seconds
+            renderQuestions(); // Render questions on page load
+            const twelveMinutes = 60 * 12, // 12 minutes in seconds
                   display = document.getElementById('timer');
-            startTimer(twentyFiveMinutes, display);
+            startTimer(twelveMinutes, display);
         };
 
+        // Function to check answers and display the result
         function checkAnswers() {
-            const correctAnswers = {
-                q1: 'B',   // 1. B) 1290–1320 AD
-                q2: 'B',   // 2. B) Khalj region in Afghanistan
-                q3: 'B',   // 3. B) Jalaluddin Firuz Khilji
-                q4: 'B',   // 4. B) Helmand River Valley
-                q5: 'A',   // 5. A) Malik Firuz
-                q6: 'B',   // 6. B) Alauddin Khilji
-                q7: 'B',   // 7. B) Alauddin Khilji
-                q8: 'A',   // 8. A) Shihabuddin Umar Khilji
-                q9: 'B',   // 9. B) Shaista Khan
-                q10: 'A',  // 10. A) Slave Dynasty
-                q11: 'B',  // 11. B) Hindus
-                q12: 'B',  // 12. B) Jalaluddin Firuz Khilji
-                q13: 'B',  // 13. B) Mongolpuri (Nav Musalman)
-                q14: 'B',  // 14. B) Ali Gurshasp
-                q15: 'B',  // 15. B) Jalaluddin Firuz Khilji
-                q16: 'B',  // 16. B) Kara-Manikpur
-                q17: 'B',  // 17. B) 1296 AD
-                q18: 'B',  // 18. B) Alauddin Khilji
-                q19: 'B',  // 19. B) Stabilize prices and prevent hoarding
-                q20: 'A',  // 20. A) Shihabuddin Umar Khilji
-                q21: 'A',  // 21. A) Tughlaq Dynasty
-                q22: 'B',  // 22. B) Shihabuddin Umar Khilji
-                q23: 'C',  // 23. C) 1316–1320 AD
-                q24: 'B',  // 24. B) Khilji Dynasty
-                q25: 'C',  // 25. C) Ghiyasuddin Tughlaq
-                q26: 'B',  // 26. B) Delhi Sultanate
-                q27: 'C',  // 27. C) Defense Minister
-                q28: 'C',  // 28. C) Turkic
-                q29: 'B',  // 29. B) Alauddin Khilji
-                q30: 'B',  // 30. B) Mongol converts to Islam
-                q31: 'C',  // 31. C) Qutbuddin Mubarak Shah Khilji
-                q32: 'B',  // 32. B) Mongol invasions
-                q33: 'B',  // 33. B) Head of the Military Band
-                q34: 'B',  // 34. B) Indo-Islamic architecture
-                q35: 'B',  // 35. B) Army
-                q36: 'C',  // 36. C) Mongol converts to Islam
-                q37: 'C',  // 37. C) Nasiruddin Khusro Shah
-                q38: 'C',  // 38. C) Qutbuddin Mubarak Shah Khilji
-                q39: 'B',  // 39. B) Administrative innovations and expanding the Sultanate
-                q40: 'A',  // 40. A) Tughlaq Dynasty
-                q41: 'B',  // 41. B) Ali Gurshasp
-                q42: 'B',  // 42. B) Lal Mahal (Red Palace)
-                q43: 'B',  // 43. B) Sikandar-e-Sani
-                q44: 'B',  // 44. B) Amir Khusrau
-                q45: 'B',  // 45. B) Mongols
-                q46: 'C',  // 46. C) Blood and Sword
-                q47: 'C',  // 47. C) Amir Khusrau
-                q48: 'C',  // 48. C) Gujarat Campaign
-                q49: 'B',  // 49. B) 1298 AD
-                q50: 'A'   // 50. A) Ulugh Khan and Nusrat Khan
-                // Add more correct answers as needed for additional questions
-            };
             let score = 0;
-            let totalQuestions = Object.keys(correctAnswers).length;
+            let totalQuestions = shuffledQuestions.length; // Use shuffledQuestions
 
-            for (let key in correctAnswers) {
-                const answer = document.querySelector(`input[name="${key}"]:checked`);
-                if (answer && answer.value === correctAnswers[key]) {
-                    score++;
+            shuffledQuestions.forEach((q, index) => { // Iterate over shuffledQuestions
+                const selectedOption = document.querySelector(`input[name="${q.id}"]:checked`);
+                if (selectedOption) {
+                    // Find the corresponding option object based on the label
+                    const selectedLabel = selectedOption.value;
+                    // Map label to option index
+                    const labelIndex = ['A', 'B', 'C', 'D'].indexOf(selectedLabel);
+                    if (labelIndex !== -1 && q.options[labelIndex].isCorrect) {
+                        score++;
+                        // Mark as correct
+                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                        if (questionMapLink) {
+                            questionMapLink.classList.add('correct');
+                            // Optionally, remove 'incorrect' class if previously set
+                            questionMapLink.classList.remove('incorrect');
+                        }
+                    } else {
+                        // Mark as incorrect
+                        const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                        if (questionMapLink) {
+                            questionMapLink.classList.add('incorrect');
+                            // Optionally, remove 'correct' class if previously set
+                            questionMapLink.classList.remove('correct');
+                        }
+                    }
+                } else {
+                    // Optionally, handle unanswered questions
+                    const questionMapLink = document.querySelector(`.question-map .question-link[href="#question-${index + 1}"]`);
+                    if (questionMapLink) {
+                        // Remove both classes if the question was not answered
+                        questionMapLink.classList.remove('correct', 'incorrect');
+                    }
                 }
-            }
+            });
 
             const resultDiv = document.getElementById('result');
             resultDiv.textContent = `You scored ${score} out of ${totalQuestions}`;
 
-            // Disable all inputs
+            // Disable all inputs to prevent changes after submission
             const inputs = document.querySelectorAll('input[type="radio"]');
             inputs.forEach(input => {
                 input.disabled = true;
             });
 
-            // Disable the submit button
+            // Disable the submit button to prevent multiple submissions
             const submitButton = document.getElementById('submitBtn');
             submitButton.disabled = true;
         }
+
+        // Toggle Question Map on small screens
+        const toggleBtn = document.getElementById('toggleQuestionMap');
+        const questionMap = document.getElementById('questionMap');
+
+        toggleBtn.addEventListener('click', () => {
+            questionMap.classList.toggle('active');
+        });
     </script>
 </body>
 </html>
