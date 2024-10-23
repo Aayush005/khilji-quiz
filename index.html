@@ -272,7 +272,7 @@
 </head>
 <body>
     <!-- Timer Display -->
-    <div class="timer" id="timer">12:00</div>
+    <div class="timer" id="timer">10:00</div>
 
     <!-- Toggle Button for Question Map (Visible on Small Screens) -->
     <button class="toggle-question-map" id="toggleQuestionMap">☰</button>
@@ -1188,7 +1188,7 @@
         // Initialize the quiz on page load
         window.onload = function () {
             renderQuestions(); // Render questions on page load
-            const twelveMinutes = 60 * 12, // 12 minutes in seconds
+            const twelveMinutes = 60 * 10, // 10 minutes in seconds
                   display = document.getElementById('timer');
             startTimer(twelveMinutes, display);
         };
